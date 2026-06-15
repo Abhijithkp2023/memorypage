@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "image": "/slide 01.jpg",
+    "color": "#f5e6e0"
+  },
+  {
+    "id": 2,
+    "image": "/slide 02.jpg",
+    "color": "#e0e8f5"
+  },
+  {
+    "id": 3,
+    "image": "/slide 03.jpg",
+    "color": "#e8f0e6"
+  }
+]

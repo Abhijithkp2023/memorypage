@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Great_Vibes } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`h-full ${inter.variable} ${playfair.variable} ${greatVibes.variable}`}>
       <body className={`${inter.className} min-h-full flex flex-col antialiased`}>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
