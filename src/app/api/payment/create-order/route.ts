@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import Razorpay from "razorpay";
 import { getTemplateConfig } from "@/templates/registry";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
+    // Dynamic import prevents the razorpay package from running at build time
+    const Razorpay = (await import("razorpay")).default;
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID!,
       key_secret: process.env.RAZORPAY_KEY_SECRET!,
