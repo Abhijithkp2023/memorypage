@@ -21,7 +21,7 @@ export default async function DashboardPage() {
       <DashboardNav user={session.user} />
 
       <div className="pt-24 pb-20 px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-300 mx-auto">
           <div className="flex items-center justify-between mb-10">
             <div>
               <h1 className="text-3xl font-light text-stone-800">Your Websites</h1>

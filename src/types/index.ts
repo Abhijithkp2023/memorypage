@@ -39,6 +39,20 @@ export interface WebsiteData {
   };
 }
 
+export interface SectionField {
+  key: string;
+  label: string;
+  type: "text" | "date" | "textarea";
+  placeholder?: string;
+  required?: boolean;
+}
+
+export interface SectionMeta {
+  sectionKey: keyof SectionToggles;
+  label: string;
+  fields: SectionField[];
+}
+
 export interface TemplateConfig {
   id: string;
   name: string;
@@ -55,4 +69,5 @@ export interface TemplateConfig {
   };
   defaultSections: SectionToggles;
   defaultContent: WebsiteData["content"];
+  sectionsMeta: SectionMeta[];
 }

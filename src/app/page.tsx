@@ -100,7 +100,7 @@ export default function HomePage() {
 
       {/* Event types */}
       <section className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-300 mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-light text-stone-800 mb-3">
               Every occasion, beautifully covered
@@ -128,7 +128,7 @@ export default function HomePage() {
         className="py-20 px-6"
         style={{ background: "linear-gradient(160deg, #fff8f5 0%, #fdf6f0 100%)" }}
       >
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-300 mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-light text-stone-800 mb-3">How it works</h2>
             <p className="text-stone-500">Three simple steps to your beautiful event website</p>
@@ -154,7 +154,7 @@ export default function HomePage() {
 
       {/* Features + Pricing */}
       <section className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-300 mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl font-light text-stone-800 mb-4">
@@ -244,7 +244,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-stone-100 bg-white">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-400">
+        <div className="max-w-300 mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-400">
           <p style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.4rem", color: "#c8896a" }}>
             MemoryPage
           </p>
