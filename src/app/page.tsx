@@ -55,7 +55,7 @@ export default function HomePage() {
           background: "linear-gradient(160deg, #fff8f5 0%, #fdf0f8 50%, #f5f0ff 100%)",
         }}
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-300 mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/80 border border-rose-100 rounded-full px-4 py-2 text-sm text-rose-500 mb-8 shadow-sm">
             <Sparkles size={14} />
             Beautiful event websites in minutes

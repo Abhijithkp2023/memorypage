@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-
-export const dynamic = "force-dynamic";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getTemplateConfig } from "@/templates/registry";
 import type { WebsiteData } from "@/types";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       .digest("hex");
 
     if (expected !== razorpay_signature) {
+      console.error("Signature mismatch", { expected, got: razorpay_signature });
       return NextResponse.json({ error: "Invalid payment signature" }, { status: 400 });
     }
 
@@ -89,7 +90,15 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, slug: website.slug });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: "Failed to verify payment" }, { status: 500 });
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("verify error:", msg);
+    // Surface slug conflict clearly
+    if (msg.includes("Unique constraint") || msg.toLowerCase().includes("slug")) {
+      return NextResponse.json(
+        { error: "That website URL is already taken. Go back and adjust the name or date." },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

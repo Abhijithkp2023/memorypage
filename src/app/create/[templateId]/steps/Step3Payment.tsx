@@ -69,23 +69,28 @@ export default function Step3Payment({ template, data, email, password, devMode,
         prefill: { email },
         theme: { color: "#c8896a" },
         handler: async (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => {
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              email,
-              password,
-              websiteData: data,
-              templateId: template.id,
-            }),
-          });
-          if (verifyRes.ok) {
-            onSuccess(data.slug);
-          } else {
-            setError("Payment verification failed. Please contact support.");
+          try {
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                email,
+                password,
+                websiteData: data,
+                templateId: template.id,
+              }),
+            });
+            const result = await verifyRes.json();
+            if (verifyRes.ok && result.success) {
+              onSuccess(result.slug ?? data.slug);
+            } else {
+              setError(result.error ?? "Payment verification failed.");
+            }
+          } catch {
+            setError("Network error during verification. Please contact support.");
           }
           setLoading(false);
         },
@@ -179,12 +184,8 @@ export default function Step3Payment({ template, data, email, password, devMode,
               disabled={loading}
               className="w-full py-3 rounded-xl text-sm font-medium transition-all border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100 disabled:opacity-60"
             >
-              {loading ? "Opening..." : "🧪 Test Razorpay Checkout (use card 4111 1111 1111 1111)"}
+              {loading ? "Opening..." : "🧪 Test Razorpay Checkout"}
             </button>
-
-            <p className="text-xs text-amber-500 leading-relaxed">
-              Test card: <span className="font-mono font-medium">4111 1111 1111 1111</span> · Expiry: any future date · CVV: any 3 digits · OTP: <span className="font-mono font-medium">123456</span>
-            </p>
           </div>
         )}
       </div>
