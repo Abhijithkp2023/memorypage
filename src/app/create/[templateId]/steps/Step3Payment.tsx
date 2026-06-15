@@ -106,7 +106,7 @@ export default function Step3Payment({ template, data, email, password, devMode,
         {devMode && (
           <div className="rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-700 mb-6 flex items-center gap-2">
             <span className="text-base">🛠</span>
-            <span><strong>Dev mode</strong> — Razorpay not configured. Use the skip button below to test the full flow.</span>
+            <span><strong>Dev mode</strong> — Use the dev tools below to skip payment or test Razorpay with a test card.</span>
           </div>
         )}
 
@@ -145,28 +145,48 @@ export default function Step3Payment({ template, data, email, password, devMode,
           </div>
         )}
 
-        {devMode ? (
-          <button
-            onClick={handleDevSkip}
-            disabled={loading}
-            className="w-full py-4 rounded-2xl text-sm font-medium transition-all hover:opacity-90 disabled:opacity-60 border-2 border-dashed border-amber-400 text-amber-700 bg-amber-50"
-          >
-            {loading ? "Creating website..." : "⚡ Skip Payment & Publish (Dev Mode)"}
-          </button>
-        ) : (
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className="w-full py-4 rounded-2xl text-white text-sm font-medium transition-all hover:opacity-90 disabled:opacity-60"
-            style={{ background: "linear-gradient(135deg, #c8896a, #a87060)" }}
-          >
-            {loading ? "Processing..." : `Pay ${formatCurrency(template.price / 100)} & Publish`}
-          </button>
-        )}
+        {/* Primary pay button — always shown */}
+        <button
+          onClick={handlePayment}
+          disabled={loading}
+          className="w-full py-4 rounded-2xl text-white text-sm font-medium transition-all hover:opacity-90 disabled:opacity-60"
+          style={{ background: "linear-gradient(135deg, #c8896a, #a87060)" }}
+        >
+          {loading ? "Processing..." : `Pay ${formatCurrency(template.price / 100)} & Publish`}
+        </button>
 
-        <p className="text-xs text-center text-stone-400 mt-4">
-          {devMode ? "Dev mode — no real payment taken" : "Secured by Razorpay · One-time payment · No subscription"}
+        <p className="text-xs text-center text-stone-400 mt-3">
+          Secured by Razorpay · One-time payment · No subscription
         </p>
+
+        {/* Dev tools — skip & test Razorpay */}
+        {devMode && (
+          <div className="mt-6 rounded-2xl border border-dashed border-amber-300 bg-amber-50 p-5 space-y-3">
+            <p className="text-xs uppercase tracking-widest text-amber-600 font-medium flex items-center gap-1.5">
+              🛠 Dev Tools
+            </p>
+
+            <button
+              onClick={handleDevSkip}
+              disabled={loading}
+              className="w-full py-3 rounded-xl text-sm font-medium transition-all border border-amber-300 text-amber-700 hover:bg-amber-100 disabled:opacity-60"
+            >
+              {loading ? "Creating..." : "⚡ Skip Payment & Publish"}
+            </button>
+
+            <button
+              onClick={handlePayment}
+              disabled={loading}
+              className="w-full py-3 rounded-xl text-sm font-medium transition-all border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100 disabled:opacity-60"
+            >
+              {loading ? "Opening..." : "🧪 Test Razorpay Checkout (use card 4111 1111 1111 1111)"}
+            </button>
+
+            <p className="text-xs text-amber-500 leading-relaxed">
+              Test card: <span className="font-mono font-medium">4111 1111 1111 1111</span> · Expiry: any future date · CVV: any 3 digits · OTP: <span className="font-mono font-medium">123456</span>
+            </p>
+          </div>
+        )}
       </div>
 
       <button
