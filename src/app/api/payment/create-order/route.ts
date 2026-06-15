@@ -5,13 +5,6 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
-    // Dynamic import prevents the razorpay package from running at build time
-    const Razorpay = (await import("razorpay")).default;
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    });
-
     const { templateId } = await req.json();
 
     const template = getTemplateConfig(templateId);
@@ -19,11 +12,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Template not found" }, { status: 400 });
     }
 
-    const order = await razorpay.orders.create({
-      amount: template.price,
-      currency: "INR",
-      receipt: `mp_${Date.now()}`,
+    const keyId = process.env.RAZORPAY_KEY_ID!;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET!;
+
+    // Call Razorpay REST API directly — no npm package needed
+    const response = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString("base64")}`,
+      },
+      body: JSON.stringify({
+        amount: template.price,
+        currency: "INR",
+        receipt: `mp_${Date.now()}`,
+      }),
     });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err?.error?.description ?? "Razorpay order creation failed");
+    }
+
+    const order = await response.json();
 
     return NextResponse.json({
       orderId: order.id,
