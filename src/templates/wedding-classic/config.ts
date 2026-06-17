@@ -10,6 +10,7 @@ export const config: TemplateConfig = {
         { key: "bride", label: "Bride's Name", type: "text", placeholder: "Sarah", required: true },
         { key: "date", label: "Wedding Date", type: "text", placeholder: "December 14, 2026", required: true },
         { key: "tagline", label: "Tagline", type: "text", placeholder: "Two hearts, one forever" },
+        { key: "heroImage", label: "Hero Background Photo", type: "image" },
       ],
     },
     {
@@ -20,6 +21,8 @@ export const config: TemplateConfig = {
         { key: "text", label: "Your Story", type: "textarea", placeholder: "Tell your love story..." },
         { key: "groomName", label: "Groom's Name", type: "text", placeholder: "Alex" },
         { key: "brideName", label: "Bride's Name", type: "text", placeholder: "Sarah" },
+        { key: "groomImage", label: "Groom Photo", type: "image" },
+        { key: "brideImage", label: "Bride Photo", type: "image" },
       ],
     },
     {
@@ -28,6 +31,7 @@ export const config: TemplateConfig = {
       fields: [
         { key: "title", label: "Gallery Title", type: "text", placeholder: "Our Moments" },
         { key: "subtitle", label: "Subtitle", type: "text", placeholder: "A glimpse into our journey" },
+        { key: "images", label: "Gallery Photos", type: "images", maxCount: 12 },
       ],
     },
     {

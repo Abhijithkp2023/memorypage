@@ -1,5 +1,7 @@
 "use client";
 
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
+
 interface HeroContent {
   groom: string;
   bride: string;
@@ -9,12 +11,16 @@ interface HeroContent {
 }
 
 export default function Hero({ content }: { content: HeroContent }) {
+  const bgImage = content.heroImage
+    ? cloudinaryUrl(content.heroImage, { width: 1920 })
+    : undefined;
+
   return (
     <section
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundImage: content.heroImage
-          ? `url(${content.heroImage})`
+        backgroundImage: bgImage
+          ? `url(${bgImage})`
           : "linear-gradient(135deg, #fdf6f0 0%, #f8e8e8 50%, #f0e8f0 100%)",
         backgroundSize: "cover",
         backgroundPosition: "center",

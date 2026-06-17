@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
 
 interface GalleryContent {
   title: string;
@@ -51,7 +52,11 @@ export default function Gallery({ content }: { content: GalleryContent }) {
                 onClick={() => setSelected(src)}
                 className="aspect-square rounded-xl overflow-hidden hover:scale-[1.02] transition-transform shadow-sm"
               >
-                <img src={src} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={cloudinaryUrl(src, { width: 600 })}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
               </button>
             ))}
           </div>
@@ -65,7 +70,7 @@ export default function Gallery({ content }: { content: GalleryContent }) {
           onClick={() => setSelected(null)}
         >
           <img
-            src={selected}
+            src={cloudinaryUrl(selected, { width: 1200 })}
             alt=""
             className="max-w-full max-h-full rounded-xl shadow-2xl"
             onClick={(e) => e.stopPropagation()}

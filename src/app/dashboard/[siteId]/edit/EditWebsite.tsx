@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ImageUpload from "@/components/ImageUpload";
 import type { WebsiteData } from "@/types";
 import { Check } from "lucide-react";
 
@@ -16,11 +17,16 @@ export default function EditWebsite({ siteId, initialData }: Props) {
   const [saved, setSaved] = useState(false);
 
   const lang = "en";
-  const hero = (data.content.hero?.[lang] ?? {}) as Record<string, string>;
-  const story = (data.content.story?.[lang] ?? {}) as Record<string, string>;
+  const hero = (data.content.hero?.[lang] ?? {}) as Record<string, string | string[]>;
+  const story = (data.content.story?.[lang] ?? {}) as Record<string, string | string[]>;
+  const gallery = (data.content.gallery?.[lang] ?? {}) as Record<string, string | string[]>;
   const event = (data.content.event?.[lang] ?? {}) as Record<string, string>;
 
-  const setField = (section: keyof WebsiteData["content"], key: string, value: string) => {
+  const setField = (
+    section: keyof WebsiteData["content"],
+    key: string,
+    value: string | string[]
+  ) => {
     setData((prev) => ({
       ...prev,
       content: {
@@ -28,7 +34,7 @@ export default function EditWebsite({ siteId, initialData }: Props) {
         [section]: {
           ...prev.content[section],
           [lang]: {
-            ...((prev.content[section]?.[lang] as Record<string, string>) ?? {}),
+            ...((prev.content[section]?.[lang] as Record<string, string | string[]>) ?? {}),
             [key]: value,
           },
         },
@@ -66,7 +72,7 @@ export default function EditWebsite({ siteId, initialData }: Props) {
           <div>
             <label className="block text-xs text-stone-500 mb-1.5">Groom&apos;s Name</label>
             <input
-              value={hero.groom ?? ""}
+              value={(hero.groom as string) ?? ""}
               onChange={(e) => setField("hero", "groom", e.target.value)}
               className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
             />
@@ -74,7 +80,7 @@ export default function EditWebsite({ siteId, initialData }: Props) {
           <div>
             <label className="block text-xs text-stone-500 mb-1.5">Bride&apos;s Name</label>
             <input
-              value={hero.bride ?? ""}
+              value={(hero.bride as string) ?? ""}
               onChange={(e) => setField("hero", "bride", e.target.value)}
               className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
             />
@@ -82,7 +88,7 @@ export default function EditWebsite({ siteId, initialData }: Props) {
           <div>
             <label className="block text-xs text-stone-500 mb-1.5">Display Date</label>
             <input
-              value={hero.date ?? ""}
+              value={(hero.date as string) ?? ""}
               onChange={(e) => setField("hero", "date", e.target.value)}
               className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
             />
@@ -90,9 +96,16 @@ export default function EditWebsite({ siteId, initialData }: Props) {
           <div>
             <label className="block text-xs text-stone-500 mb-1.5">Tagline</label>
             <input
-              value={hero.tagline ?? ""}
+              value={(hero.tagline as string) ?? ""}
               onChange={(e) => setField("hero", "tagline", e.target.value)}
               className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
+            />
+          </div>
+          <div className="col-span-2">
+            <ImageUpload
+              label="Hero Background Photo"
+              value={(hero.heroImage as string) ?? ""}
+              onChange={(val) => setField("hero", "heroImage", val)}
             />
           </div>
         </div>
@@ -103,11 +116,37 @@ export default function EditWebsite({ siteId, initialData }: Props) {
         <h2 className="text-xs uppercase tracking-widest text-rose-400 mb-5">Love Story</h2>
         <textarea
           rows={4}
-          value={story.text ?? ""}
+          value={(story.text as string) ?? ""}
           onChange={(e) => setField("story", "text", e.target.value)}
-          className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors resize-none"
+          className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors resize-none mb-4"
         />
+        <div className="grid grid-cols-2 gap-4">
+          <ImageUpload
+            label="Groom Photo"
+            value={(story.groomImage as string) ?? ""}
+            onChange={(val) => setField("story", "groomImage", val)}
+          />
+          <ImageUpload
+            label="Bride Photo"
+            value={(story.brideImage as string) ?? ""}
+            onChange={(val) => setField("story", "brideImage", val)}
+          />
+        </div>
       </div>
+
+      {/* Gallery */}
+      {data.sections.gallery && (
+        <div className="bg-white rounded-3xl p-8 shadow-sm border border-stone-100">
+          <h2 className="text-xs uppercase tracking-widest text-rose-400 mb-5">Photo Gallery</h2>
+          <ImageUpload
+            label="Gallery Photos"
+            value={(gallery.images as string[]) ?? []}
+            onChange={(val) => setField("gallery", "images", val)}
+            multiple
+            maxCount={12}
+          />
+        </div>
+      )}
 
       {/* Event details */}
       <div className="bg-white rounded-3xl p-8 shadow-sm border border-stone-100">

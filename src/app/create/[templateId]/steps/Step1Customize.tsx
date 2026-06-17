@@ -13,14 +13,14 @@ interface Props {
 export default function Step1Customize({ template, data, onChange, onNext }: Props) {
   const lang = "en";
 
-  function getSectionContent(sectionKey: string): Record<string, string> {
+  function getSectionContent(sectionKey: string): Record<string, string | string[]> {
     const block = data.content[sectionKey as keyof typeof data.content];
-    return (block?.[lang] ?? block?.en ?? {}) as Record<string, string>;
+    return (block?.[lang] ?? block?.en ?? {}) as Record<string, string | string[]>;
   }
 
-  function setSectionField(sectionKey: string, key: string, value: string) {
+  function setSectionField(sectionKey: string, key: string, value: string | string[]) {
     const block = data.content[sectionKey as keyof typeof data.content] ?? {};
-    const existing = (block[lang] ?? block.en ?? {}) as Record<string, string>;
+    const existing = (block[lang] ?? block.en ?? {}) as Record<string, string | string[]>;
     onChange({
       ...data,
       content: {
@@ -43,7 +43,10 @@ export default function Step1Customize({ template, data, onChange, onNext }: Pro
     .find((m) => m.sectionKey === "hero")
     ?.fields.filter((f) => f.required)
     .map((f) => f.key) ?? [];
-  const canProceed = requiredKeys.every((k) => !!heroContent[k]);
+  const canProceed = requiredKeys.every((k) => {
+    const val = heroContent[k];
+    return typeof val === "string" ? !!val : Array.isArray(val) && val.length > 0;
+  });
 
   return (
     <div className="space-y-6">

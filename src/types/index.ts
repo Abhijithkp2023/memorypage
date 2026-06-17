@@ -42,9 +42,10 @@ export interface WebsiteData {
 export interface SectionField {
   key: string;
   label: string;
-  type: "text" | "date" | "textarea";
+  type: "text" | "date" | "textarea" | "image" | "images";
   placeholder?: string;
   required?: boolean;
+  maxCount?: number;
 }
 
 export interface SectionMeta {

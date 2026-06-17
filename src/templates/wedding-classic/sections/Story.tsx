@@ -1,3 +1,5 @@
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
+
 interface StoryContent {
   title: string;
   text: string;
@@ -31,7 +33,7 @@ export default function Story({ content }: { content: StoryContent }) {
             >
               {content.groomImage ? (
                 <img
-                  src={content.groomImage}
+                  src={cloudinaryUrl(content.groomImage, { width: 400 })}
                   alt={content.groomName}
                   className="w-full h-full object-cover"
                 />
@@ -70,7 +72,7 @@ export default function Story({ content }: { content: StoryContent }) {
             >
               {content.brideImage ? (
                 <img
-                  src={content.brideImage}
+                  src={cloudinaryUrl(content.brideImage, { width: 400 })}
                   alt={content.brideName}
                   className="w-full h-full object-cover"
                 />

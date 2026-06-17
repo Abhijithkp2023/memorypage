@@ -1,14 +1,17 @@
 "use client";
+import ImageUpload from "@/components/ImageUpload";
 import { getSectionRenderer } from "@/templates/sectionRenderers";
 import type { SectionMeta, SectionToggles } from "@/types";
+
+type SectionContent = Record<string, string | string[]>;
 
 interface Props {
   meta: SectionMeta;
   templateId: string;
   enabled: boolean;
-  content: Record<string, string>;
+  content: SectionContent;
   onToggle: () => void;
-  onChange: (key: string, value: string) => void;
+  onChange: (key: string, value: string | string[]) => void;
 }
 
 export default function SectionCard({
@@ -68,31 +71,55 @@ export default function SectionCard({
       {/* Form fields — only shown when enabled */}
       {enabled && (
         <div className="p-6 grid grid-cols-2 gap-4">
-          {meta.fields.map((field) => (
-            <div key={field.key} className={field.type === "textarea" ? "col-span-2" : ""}>
-              <label className="block text-xs text-stone-500 mb-1.5">
-                {field.label}
-                {field.required && <span className="text-rose-400 ml-0.5">*</span>}
-              </label>
-              {field.type === "textarea" ? (
-                <textarea
-                  rows={3}
-                  value={content[field.key] ?? ""}
-                  onChange={(e) => onChange(field.key, e.target.value)}
-                  placeholder={field.placeholder}
-                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors resize-none"
-                />
-              ) : (
-                <input
-                  type={field.type}
-                  value={content[field.key] ?? ""}
-                  onChange={(e) => onChange(field.key, e.target.value)}
-                  placeholder={field.placeholder}
-                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
-                />
-              )}
-            </div>
-          ))}
+          {meta.fields.map((field) => {
+            const isFullWidth =
+              field.type === "textarea" || field.type === "image" || field.type === "images";
+
+            return (
+              <div key={field.key} className={isFullWidth ? "col-span-2" : ""}>
+                {field.type === "image" || field.type === "images" ? (
+                  <ImageUpload
+                    label={
+                      field.label +
+                      (field.required ? " *" : "")
+                    }
+                    value={
+                      field.type === "images"
+                        ? (content[field.key] as string[] | undefined) ?? []
+                        : (content[field.key] as string | undefined) ?? ""
+                    }
+                    onChange={(val) => onChange(field.key, val)}
+                    multiple={field.type === "images"}
+                    maxCount={field.maxCount ?? 12}
+                  />
+                ) : (
+                  <>
+                    <label className="block text-xs text-stone-500 mb-1.5">
+                      {field.label}
+                      {field.required && <span className="text-rose-400 ml-0.5">*</span>}
+                    </label>
+                    {field.type === "textarea" ? (
+                      <textarea
+                        rows={3}
+                        value={(content[field.key] as string) ?? ""}
+                        onChange={(e) => onChange(field.key, e.target.value)}
+                        placeholder={field.placeholder}
+                        className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors resize-none"
+                      />
+                    ) : (
+                      <input
+                        type={field.type}
+                        value={(content[field.key] as string) ?? ""}
+                        onChange={(e) => onChange(field.key, e.target.value)}
+                        placeholder={field.placeholder}
+                        className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-300 transition-colors"
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

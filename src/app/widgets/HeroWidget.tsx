@@ -51,7 +51,7 @@ export default function HeroWidget() {
 
     // 4. Background colour at midway
     tl.to(bgRef.current, {
-      backgroundColor: slides[next].color,
+      background: slides[next].color,
       duration: 0.5,
       ease: "power1.inOut",
     }, 0.6);
@@ -81,7 +81,7 @@ export default function HeroWidget() {
     <section
       ref={bgRef}
       className="relative overflow-hidden"
-      style={{ minHeight: "100vh", backgroundColor: slides[0].color }}
+      style={{ minHeight: "100vh", background: slides[0].color }}
     >
       <div
         className="max-w-350 mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center"
